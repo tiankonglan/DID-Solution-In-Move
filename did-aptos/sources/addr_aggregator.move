@@ -5,15 +5,16 @@ module my_addr::addr_aggregator {
    use std::vector;
    use my_addr::utils;
    use my_addr::eth_sig_verifier;
-   use 0x1::bcs;
+   use aptos_framework::bcs;
+   use std::string::{Self, String};
 
    
    struct AddrInfo has store, copy, drop {
-      addr: address,
-      description: vector<u8>,
-      chain_name: vector<u8>,
-      msg: vector<u8>,
-      signature: vector<u8>,
+      addr: String,
+      description: String,
+      chain_name: String,
+      msg: String,
+      signature: String
       created_at: u64,
       updated_at: u64,
       id : u64,
@@ -35,9 +36,9 @@ module my_addr::addr_aggregator {
    }
 
    public entry fun add_addr(acct: &signer, 
-      addr: address, 
-      chain_name: vector<u8>,
-      description: vector<u8>) acquires AddrAggregator {
+      addr String, 
+      chain_name: String,
+      description: String) acquires AddrAggregator {
       let addr_aggr = borrow_global_mut<AddrAggregator>(signer::address_of(acct));   
       let id = addr_aggr.max_id + 1;
       
@@ -51,7 +52,7 @@ module my_addr::addr_aggregator {
          chain_name: chain_name,
          description: description,
          signature: x"",
-         msg: msg,
+         msg: string::utf8(msg),
          created_at: now,
          updated_at: 0,
          id : id,
@@ -71,6 +72,7 @@ module my_addr::addr_aggregator {
             // addr_info.signature = signature;
             return addr_info.msg
          };
+         i = i + 1;
       };
 
       return x""
