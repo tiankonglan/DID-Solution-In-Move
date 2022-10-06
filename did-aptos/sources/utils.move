@@ -1,8 +1,8 @@
 module my_addr::utils {
     use std::vector;
     use std::string::{Self, String};
-    #[test_only]
-    use std::debug;
+    // #[test_only]
+    // use std::debug;
 
     public fun u64_to_vec_u8(val : u64) : vector<u8> {
         let result = vector::empty<u8>();
